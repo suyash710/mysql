@@ -1,4 +1,10 @@
-CREATE  TABLE `db`.`city` (
+#Author - Suyash
+
+#Purpose - To have a list of cities
+
+#Type - constant
+
+CREATE TABLE `db`.`city` (
 
   `name` VARCHAR(20) NOT NULL ,
 
