@@ -1,7 +1,19 @@
-import re
-import xlwt
+import xlsxwriter
+from xlutils.copy import copy
+from xlrd import open_workbook
+import os.path
+from openpyxl import load_workbook
+import openpyxl
+
+import os
 
 # read the File.....
+for root, dirs, files in os.walk("./DDL/v2.7.2"):
+    for file in files:
+        if file.endswith(".sql"):
+             print(os.path.join(root, file))
+             print(file);
+
 with open('01_college_TBL_create_20160620.sql') as f:
     sqlContent = f.read().splitlines()
 
@@ -10,26 +22,51 @@ with open('01_college_TBL_create_20160620.sql') as f:
 for typeData in sqlContent:       #for loop to find the "Type" of SQL data file. 
     if subType in typeData:		
         typeData= typeData.split();
-        Type=typeData[len(typeData)-1];				
+        Type=typeData[len(typeData)-1];		
+        if (Type.lower()== "master" or Type.lower()== "constant"):	
+        	Type=Type;
+        else :
+        	Type="transactional";
+
         print("\n\nType is - ",Type,"\n\n");			# prints the Type of SQL data
 
         subName="CREATE";
         print(sqlContent);
 for nameData in sqlContent:			#for loop to get the SQL file Name.
 	if subName in nameData:
-	        nameData=nameData.split();	
-	        Name=nameData[len(nameData)-2];
+	        nameData=nameData.split();
+	        Name=nameData[len(nameData)-2]; name_part=Name.split(".");
+	        Name=name_part[len(name_part)-1]; name_part=Name.split("`");
+	        Name=name_part[len(name_part)-2];
 	        print("\nFile_name - ",Name,"\n\n");		#prints the SQL file Name.
 
-	        dataSQL=xlwt.Workbook(encoding='utf-8');	# makes an Excel file	
-	        sheet1=dataSQL.add_sheet("Sheet_1");		# adds a Sheet to the file
+	        if os.path.isfile("dataSQL.xlsx"):
+	        	print ("file exist");
 
-	        sheet1.write(0,0,"#");			# adds the Index to the excel sheet.
-	        sheet1.write(0,1,"Type-");
-	        sheet1.write(0,2,"Name-");
+	        	wb = load_workbook("dataSQL.xlsx", use_iterators=True)
+	        	sheet = wb.worksheets[0]
+	        	row_count = sheet.get_highest_row()
+	        	print (row_count);
 
-	        sheet1.write(1,1,Type);			#writes the Type to sheet.		
-	        sheet1.write(1,2,Name);			#writes the name to sheet.
-	        sheet1.write(1,0,"1");
-	        
-	        dataSQL.save("dataSQL.xls");		#Name of the Excel Sheet
+	        	wb = openpyxl.load_workbook("dataSQL.xlsx")
+	        	ws = wb.get_sheet_by_name('Sheet1')
+	        	ws.cell(row=row_count+1, column=1, value=row_count)
+	        	ws.cell(row=row_count+1, column=2, value=Name)
+	        	ws.cell(row=row_count+1, column=3, value=Type)
+	        	wb.save("dataSQL.xlsx")
+
+
+	        else:
+	        	print ("file dosent exist, making a new Sheet");
+	        	workbook=xlsxwriter.Workbook("dataSQL.xlsx");	# makes an Excel Workbook	
+		        worksheet=workbook.add_worksheet();		# adds a Sheet to the Workbook
+
+		        worksheet.write(0,0,"#");			# adds the Index to the excel sheet.
+		        worksheet.write(0,2,"Type");
+		        worksheet.write(0,1,"Name");
+
+		        worksheet.write(1,2,Type);			#writes the Type to sheet.		
+		        worksheet.write(1,1,Name);			#writes the Name to sheet.
+		        worksheet.write(1,0,1);
+
+		        workbook.close();		#Name of the Excel Sheet

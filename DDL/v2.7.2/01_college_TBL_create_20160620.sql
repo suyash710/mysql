@@ -2,9 +2,9 @@
 
 #Purpose - To have a list of Colleges
 
-#Type - variable	
+#Type - constant	
 
-UPDATE TABLE `db`.`school` (
+CREATE TABLE `db`.`college` (
 
   `name` VARCHAR(20) NOT NULL ,
 
