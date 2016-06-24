@@ -2,7 +2,7 @@
 
 #Purpose - To have a list of Countries
 
-CREATE  TABLE `country` (
+UPDATE  TABLE `country` (
 
   `name` VARCHAR(40) NOT NULL ,
 
