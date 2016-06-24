@@ -2,9 +2,7 @@
 
 #Purpose - To have a list of Countries
 
-#Type - Global
-
-CREATE  TABLE `db`.`country` (
+CREATE  TABLE `country` (
 
   `name` VARCHAR(40) NOT NULL ,
 

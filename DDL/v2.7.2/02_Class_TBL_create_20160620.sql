@@ -2,9 +2,9 @@
 
 #Purpose - To have a list of classes
 
-#Type - constant
+#Type - master
 
-CREATE  TABLE `db`.`Class` (
+CREATE  TABLE `Class` (
 
   `name` VARCHAR(25) NOT NULL ,
 
